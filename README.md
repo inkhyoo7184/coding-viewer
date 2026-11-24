@@ -8,11 +8,14 @@
 
 > 코드별 수는 참고용입니다. 질적 연구에서 코드 빈도를 결과로 쓸지는 연구 설계에 따라 정하세요.
 
+**바로 쓰기:** https://inkhyoo7184.github.io/coding-viewer/
+이 주소에 올라가 있는 것은 자료가 없는 빈 화면입니다. 여기서 고른 파일도 각자의 브라우저 안에서만 읽습니다.
+
 ## 세 가지 쓰는 법
 
 ### 1. 브라우저에서 바로 열기 (설치 없음)
 
-1. `index.html`을 브라우저로 엽니다(더블클릭).
+1. 위 주소로 들어가거나, 내려받은 `index.html`을 브라우저로 엽니다(더블클릭).
 2. **QualCoder 프로젝트 파일 열기**를 누르고, 프로젝트 폴더(예: `내프로젝트.qda`) 안의 `data.qda`를 고릅니다.
    - QualCoder는 닫아 두는 것이 좋습니다.
    - 이때 SQLite 해석기(sql.js)를 cdnjs에서 처음 한 번 받습니다. 자료는 밖으로 나가지 않습니다.
@@ -75,6 +78,7 @@ QualCoder 3.x~4.x 프로젝트 형식(`source`, `code_cat`, `code_name`, `code_t
 
 **coding-viewer** turns the text codings of a [QualCoder](https://github.com/ccbogel/QualCoder) project into a single browsable web page: filter by code (AND), document, or keyword; see context and memos; and record your own judgements per segment.
 
+- Try it at https://inkhyoo7184.github.io/coding-viewer/ (an empty page; your file is read only inside your browser).
 - Open `index.html` and choose your project's `data.qda` (read in the browser via sql.js; nothing is uploaded), or
 - `python3 build_viewer.py my.qda -o viewer.html` for a self-contained offline page, or `--json` for a data file.
 - The **Reset** button (top right) clears everything this page stored in your browser.

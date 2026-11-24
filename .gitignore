@@ -1,0 +1,14 @@
+# 실제 연구 자료와 만든 결과물은 절대 올리지 않는다.
+*.qda
+!examples/demo.qda
+!examples/demo.qda/data.qda
+coding-viewer*.html
+*_viewer.html
+판단_*.json
+*.json
+!examples/*.json
+
+# macOS / exFAT
+._*
+.DS_Store
+__pycache__/

@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>코딩 한눈에 보기</title>
+<style>
+:root{
+  --bg:#f7f6f3; --panel:#ffffff; --ink:#1f2328; --muted:#6b7078; --line:#e3e1dc;
+  --accent:#2f5d8a; --accent-soft:#e6eef6; --mark:#fff1b8; --warn:#9a4b00; --warn-soft:#fdf0e1; --danger:#b3261e;
+  --c1:#3b6ea5; --c2:#2e8b6f; --c3:#a0522d; --c4:#7a6a9a; --c5:#8a7a3a;
+  --c6:#b04a6a; --c7:#4a7f8a; --c8:#6a5acd; --c9:#7d7d7d; --c10:#c07a1a;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#16181b; --panel:#1e2125; --ink:#e6e6e3; --muted:#9a9fa6; --line:#2e3238;
+    --accent:#8fb6e0; --accent-soft:#22303f; --mark:#5a4a12; --warn:#f0b070; --warn-soft:#3a2a18; --danger:#f2a39d;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#16181b; --panel:#1e2125; --ink:#e6e6e3; --muted:#9a9fa6; --line:#2e3238;
+  --accent:#8fb6e0; --accent-soft:#22303f; --mark:#5a4a12; --warn:#f0b070; --warn-soft:#3a2a18; --danger:#f2a39d;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.6 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Segoe UI",sans-serif}
+header{padding:14px 20px 10px;border-bottom:1px solid var(--line);background:var(--panel);display:flex;gap:16px;align-items:flex-start}
+header .hl{flex:1;min-width:0}
+h1{font-size:18px;margin:0 0 4px}
+.note{color:var(--muted);font-size:12.5px;margin:0}
+.note b{color:var(--warn)}
+#reset{flex:none;border:1px solid var(--danger);color:var(--danger);background:var(--panel);border-radius:8px;padding:5px 14px;font-size:13px;font-weight:600;cursor:pointer}
+#reset:hover{background:var(--danger);color:var(--panel)}
+.wrap{display:grid;grid-template-columns:290px 1fr;min-height:calc(100vh - 70px)}
+aside{border-right:1px solid var(--line);background:var(--panel);padding:12px 12px 40px;overflow:auto;max-height:calc(100vh - 70px);position:sticky;top:0}
+main{padding:12px 20px 60px;min-width:0}
+.cat{margin:10px 0 2px;font-weight:600;font-size:12.5px;display:flex;align-items:center;gap:6px}
+.dot{width:9px;height:9px;border-radius:50%;flex:none}
+.code{display:flex;justify-content:space-between;gap:6px;padding:3px 6px 3px 18px;border-radius:6px;cursor:pointer;font-size:13px}
+.code:hover{background:var(--accent-soft)}
+.code.on{background:var(--accent);color:var(--panel)}
+.code .n{color:var(--muted);font-variant-numeric:tabular-nums;font-size:12px;white-space:nowrap}
+.code.on .n{color:inherit}
+.code.zero{opacity:.45}
+.side-h{font-size:12px;color:var(--muted);margin:0 0 6px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;position:sticky;top:0;background:var(--bg);padding:8px 0 10px;z-index:2;border-bottom:1px solid var(--line)}
+.grp{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.grp>span{font-size:12px;color:var(--muted);margin-right:2px}
+button.chip{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:3px 10px;font-size:13px;cursor:pointer}
+button.chip.on{background:var(--accent);border-color:var(--accent);color:var(--panel)}
+input[type=search],input[type=text]{flex:1;min-width:180px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink);font-size:13.5px}
+.sel{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0;font-size:12.5px;color:var(--muted);align-items:center}
+.sel .tag{background:var(--accent-soft);color:var(--ink);border-radius:6px;padding:1px 8px;cursor:pointer}
+.count{font-size:13px;color:var(--muted);margin:10px 0}
+.seg{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:0 0 10px}
+.meta{display:flex;gap:8px;align-items:baseline;font-size:12.5px;color:var(--muted)}
+.meta .doc{font-weight:700;color:var(--ink)}
+.q{margin:6px 0;font-size:14.5px;overflow-wrap:anywhere}
+.q .ctx{color:var(--muted)}
+.q mark{background:var(--mark);color:var(--ink);padding:0 2px;border-radius:3px}
+.codes{display:flex;flex-wrap:wrap;gap:5px;margin:6px 0 2px}
+.codes span{font-size:12px;border-radius:5px;padding:1px 7px;border:1px solid var(--line);border-left-width:4px;cursor:pointer;background:var(--bg)}
+.memo{font-size:13px;margin-top:6px;padding:6px 10px;border-radius:6px;background:var(--bg);overflow-wrap:anywhere}
+.memo.hl{background:var(--warn-soft)}
+.memo p{margin:0 0 3px}
+.ctxbtn{font-size:12px;color:var(--accent);cursor:pointer;background:none;border:0;padding:0;margin-left:auto}
+.empty{color:var(--muted);padding:30px 0;text-align:center}
+.judge{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)}
+.judge>span{font-size:12px;color:var(--muted)}
+.judge button{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:6px;padding:2px 9px;font-size:12.5px;cursor:pointer}
+.judge button.on{color:#fff}
+.judge textarea{flex:1 1 100%;min-height:34px;resize:vertical;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:13px/1.5 inherit}
+.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:12.5px;color:var(--muted);margin:8px 0 0}
+.tools button,.tools label{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:6px;padding:3px 10px;font-size:12.5px;cursor:pointer}
+.tools input[type=file]{display:none}
+#settings{display:none;margin:8px 0 0;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--panel)}
+#settings.open{display:block}
+#settings label{display:block;font-size:12.5px;color:var(--muted);margin:4px 0 8px}
+#settings input{width:100%;margin-top:3px}
+/* loader */
+#loader{max-width:640px;margin:48px auto;padding:0 16px}
+#loader .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px}
+#loader h2{font-size:17px;margin:0 0 8px}
+#loader p{margin:6px 0;color:var(--muted);font-size:13.5px}
+#loader .btns{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 6px}
+#loader .btns label{border:1px solid var(--accent);background:var(--accent);color:var(--panel);border-radius:8px;padding:8px 14px;font-size:14px;cursor:pointer}
+#loader .btns label.alt{background:var(--panel);color:var(--accent)}
+#loader input[type=file]{display:none}
+#loader .msg{color:var(--warn);font-size:13px;min-height:1.4em}
+#loader ol{color:var(--muted);font-size:13px;padding-left:20px;margin:10px 0 0}
+[hidden]{display:none!important}
+@media (max-width:820px){
+  .wrap{grid-template-columns:1fr}
+  aside{position:static;max-height:none;border-right:0;border-bottom:1px solid var(--line)}
+  main{padding:10px 16px 60px}
+  header{padding:12px 16px 10px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="hl">
+    <h1 id="title">코딩 한눈에 보기</h1>
+    <p class="note" id="note">QualCoder 프로젝트의 코딩을 구간별로 모아 봅니다. 파일은 <b>이 컴퓨터의 브라우저 안에서만</b> 읽으며 어디에도 올라가지 않습니다. 코드별 수는 참고용입니다.</p>
+  </div>
+  <button id="reset" type="button" title="불러온 내용, 판단, 설정을 이 브라우저에서 모두 지웁니다">Reset</button>
+</header>
+
+<section id="loader">
+  <div class="card">
+    <h2>코딩 자료 불러오기</h2>
+    <p>둘 가운데 하나를 고르세요. 불러온 파일은 저장하지 않습니다. 화면을 새로 열면 다시 불러와야 합니다.</p>
+    <div class="btns">
+      <label>QualCoder 프로젝트 파일 열기 (data.qda)<input type="file" id="openQda"></label>
+      <label class="alt">데이터 파일 열기 (JSON)<input type="file" id="openJson" accept=".json,application/json"></label>
+    </div>
+    <p class="msg" id="loadMsg"></p>
+    <ol>
+      <li>QualCoder 프로젝트 폴더(예: <code>내프로젝트.qda</code>) 안의 <code>data.qda</code> 파일을 고르세요. QualCoder는 닫아 두는 것이 좋습니다.</li>
+      <li>프로젝트 파일을 읽을 때 SQLite 해석기(sql.js)를 처음 한 번 인터넷에서 받습니다. 자료 자체는 밖으로 나가지 않습니다.</li>
+      <li>인터넷 없이 쓰려면 <code>build_viewer.py</code>로 데이터가 들어간 HTML이나 JSON을 만드세요(README 참고).</li>
+    </ol>
+  </div>
+</section>
+
+<div class="wrap" id="app" hidden>
+  <aside>
+    <p class="side-h">코드 (괄호 안: 지금 거른 구간 가운데 그 코드가 붙은 수 · 참고용)<br>누르면 그 코드가 붙은 구간만 봅니다. 여러 개를 누르면 모두 붙은 구간입니다.</p>
+    <details id="tw" open><summary class="side-h" style="cursor:pointer">코드 목록 펼치기·접기</summary><div id="tree"></div></details>
+  </aside>
+  <main>
+    <div class="bar">
+      <div class="grp" id="gD"><span>문서</span></div>
+      <input type="search" id="q" placeholder="인용문·메모·코드 이름 검색">
+      <div class="grp" id="gQ"><span>바로가기</span></div>
+      <div class="grp" id="gG"><span>판단</span></div>
+    </div>
+    <div class="tools">
+      <span id="gsum"></span>
+      <button id="exp" type="button">판단 저장(파일)</button>
+      <label>판단 불러오기<input type="file" id="imp" accept=".json,application/json"></label>
+      <button id="setBtn" type="button">설정</button>
+    </div>
+    <div id="settings">
+      <label>판단 단계 (쉼표로 구분)<input type="text" id="setGrades"></label>
+      <label>바로가기 검색어 (쉼표로 구분, 메모에 이 말이 있으면 메모를 강조합니다)<input type="text" id="setQuick"></label>
+      <div class="tools"><button id="setSave" type="button">설정 저장</button></div>
+    </div>
+    <div class="sel" id="sel"></div>
+    <div class="count" id="count"></div>
+    <div id="list"></div>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/sql-wasm.js" defer></script>
+<script>
+"use strict";
+/* build_viewer.py --embed 가 아래 null 자리에 데이터를 넣는다. */
+const EMBED = /*DATA*/null;
+
+const $ = id => document.getElementById(id);
+const LS = {
+  get(k, d){ try{ const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} },
+  clearAll(){ try{ Object.keys(localStorage).filter(k => k.startsWith("cv-")).forEach(k => localStorage.removeItem(k)); }catch(e){} }
+};
+const DEFAULT_SETTINGS = { grades: ["핵심", "보조", "보류", "제외"], quick: [] };
+const GRADE_COLOR = ["var(--c2)", "var(--c1)", "var(--c10)", "var(--c9)", "var(--c4)", "var(--c6)", "var(--c7)", "var(--c3)"];
+const CONTEXT = 90;
+
+let D = null;               // 지금 보는 데이터
+let CODE = {}, DOC = {}, CAT_COLOR = {};
+let G = {};                 // 판단 { segKey: {g, note, t} }
+let S = LS.get("cv-settings", DEFAULT_SETTINGS);
+const st = { d: new Set(), codes: new Set(), q: "", g: new Set() };
+
+/* ---------- 데이터 만들기: QualCoder SQLite → 공통 형식 ---------- */
+function rowsOf(db, sql){
+  const out = []; const stmt = db.prepare(sql);
+  while (stmt.step()) out.push(stmt.getAsObject());
+  stmt.free(); return out;
+}
+function buildFromRows(title, sources, cats, codes, codings){
+  const catById = {}; cats.forEach(c => catById[c.catid] = c);
+  const catPath = id => { const parts = []; let c = catById[id], guard = 0;
+    while (c && guard++ < 20){ parts.unshift(c.name); c = catById[c.supercatid]; }
+    return parts.join(" › ") || "(범주 없음)"; };
+  const codeById = {}; codes.forEach(c => codeById[c.cid] = c);
+  const codeName = c => { const parts = [c.name]; let p = codeById[c.supercid], guard = 0;
+    while (p && guard++ < 20){ parts.unshift(p.name); p = codeById[p.supercid]; }
+    return parts.join(" › "); };
+  const catNames = []; const outCodes = [];
+  codes.forEach(c => { const cat = catPath(c.catid); if (!catNames.includes(cat)) catNames.push(cat);
+    outCodes.push({ cid: c.cid, name: codeName(c), cat, color: c.color || "" }); });
+  const order = cats.slice().sort((a, b) => a.catid - b.catid).map(c => catPath(c.catid)).filter(n => catNames.includes(n));
+  catNames.forEach(n => { if (!order.includes(n)) order.push(n); });
+  outCodes.sort((a, b) => (order.indexOf(a.cat) - order.indexOf(b.cat)) || (a.cid - b.cid));
+  const text = {}; const docs = [];
+  sources.forEach(s => { text[s.id] = s.fulltext || ""; docs.push({ id: s.id, name: s.name || ("문서 " + s.id) }); });
+  const docName = {}; docs.forEach(d => docName[d.id] = d.name);
+  const segs = new Map();
+  codings.slice().sort((a, b) => (a.fid - b.fid) || (a.pos0 - b.pos0) || (a.pos1 - b.pos1) || (a.ctid - b.ctid)).forEach(r => {
+    if (!(r.fid in text)) return;
+    const key = docName[r.fid] + "|" + r.pos0 + "|" + r.pos1;
+    if (!segs.has(key)){
+      const t = text[r.fid]; const m = /^\s*\[([0-9:–~\-]+)\]\s*/.exec(r.memo || "");
+      segs.set(key, { k: key, doc: r.fid, pos: r.pos0, time: m ? m[1] : "",
+        quote: r.seltext || t.slice(r.pos0, r.pos1),
+        before: t.slice(Math.max(0, r.pos0 - CONTEXT), r.pos0), after: t.slice(r.pos1, r.pos1 + CONTEXT),
+        memos: [], codes: [] });
+    }
+    const s = segs.get(key);
+    const mm = (r.memo || "").replace(/^\s*\[[0-9:–~\-]+\]\s*/, "").trim();
+    if (mm && !s.memos.includes(mm)) s.memos.push(mm);
+    if (!s.codes.includes(r.cid)) s.codes.push(r.cid);
+  });
+  return { title, generated: new Date().toISOString(), docs, cats: order, codes: outCodes, segs: [...segs.values()] };
+}
+async function loadQda(file){
+  if (!window.initSqlJs) throw new Error("SQLite 해석기(sql.js)를 받지 못했습니다. 인터넷 연결을 확인하거나 JSON 방식을 쓰세요.");
+  const SQL = await initSqlJs({ locateFile: f => "https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/" + f });
+  const db = new SQL.Database(new Uint8Array(await file.arrayBuffer()));
+  try{
+    const has = n => rowsOf(db, "select name from sqlite_master where type='table' and name='" + n + "'").length > 0;
+    ["source", "code_cat", "code_name", "code_text"].forEach(n => { if (!has(n)) throw new Error("QualCoder 프로젝트 파일이 아닌 것 같습니다(" + n + " 표가 없음)."); });
+    return buildFromRows(file.name.replace(/\.qda$/i, ""),
+      rowsOf(db, "select id, name, fulltext from source where fulltext is not null"),
+      rowsOf(db, "select catid, name, supercatid from code_cat"),
+      rowsOf(db, "select cid, name, catid, supercid, color from code_name"),
+      rowsOf(db, "select ctid, cid, fid, seltext, pos0, pos1, memo from code_text"));
+  } finally { db.close(); }
+}
+
+/* ---------- 화면 ---------- */
+function gradeKey(){ return "cv-grades:" + (D ? D.title : ""); }
+function saveView(){ LS.set("cv-view:" + D.title, { d: [...st.d], codes: [...st.codes], q: st.q }); }
+function saveG(){ LS.set(gradeKey(), G); }
+
+function start(data){
+  D = data; CODE = {}; DOC = {}; CAT_COLOR = {};
+  D.codes.forEach(c => CODE[c.cid] = c);
+  D.docs.forEach(d => DOC[d.id] = d);
+  D.cats.forEach((c, i) => CAT_COLOR[c] = `var(--c${(i % 10) + 1})`);
+  G = Object.assign({}, D.grades || {}, LS.get(gradeKey(), {}));
+  const v = LS.get("cv-view:" + D.title, null);
+  st.d = new Set(v ? v.d.filter(x => DOC[x]) : []); st.codes = new Set(v ? v.codes.filter(x => CODE[x]) : []);
+  st.q = v ? (v.q || "") : ""; st.g = new Set();
+  $("title").textContent = "코딩 한눈에 보기 · " + D.title;
+  $("loader").hidden = true; $("app").hidden = false;
+  buildBar(); $("q").value = st.q;
+  if (window.innerWidth < 820) $("tw").open = false;
+  render();
+}
+function chip(parent, label, on, onclick, data){
+  const b = document.createElement("button"); b.className = "chip" + (on ? " on" : ""); b.type = "button";
+  b.textContent = label; b.onclick = onclick; if (data) Object.assign(b.dataset, data); parent.appendChild(b); return b;
+}
+function buildBar(){
+  const gD = $("gD"); gD.querySelectorAll("button").forEach(b => b.remove());
+  const used = new Set(D.segs.map(s => s.doc));
+  D.docs.filter(d => used.has(d.id)).forEach(d => chip(gD, d.name, false, () => { st.d.has(d.id) ? st.d.delete(d.id) : st.d.add(d.id); render(); }, { v: d.id }));
+  const gQ = $("gQ"); gQ.querySelectorAll("button").forEach(b => b.remove()); gQ.hidden = !S.quick.length;
+  S.quick.forEach(w => chip(gQ, w, false, () => { st.q = st.q === w ? "" : w; $("q").value = st.q; render(); }, { q: w }));
+  const gG = $("gG"); gG.querySelectorAll("button").forEach(b => b.remove());
+  [...S.grades, "미판단"].forEach(g => chip(gG, g, false, () => { st.g.has(g) ? st.g.delete(g) : st.g.add(g); render(); }, { v: g }));
+}
+function baseMatch(s){
+  if (st.d.size && !st.d.has(s.doc)) return false;
+  if (st.q){ const q = st.q.toLowerCase();
+    const hay = (s.quote + " " + s.memos.join(" ") + " " + s.codes.map(c => CODE[c] ? CODE[c].name : "").join(" ") + " " + ((G[s.k] || {}).note || "")).toLowerCase();
+    if (!hay.includes(q)) return false; }
+  if (st.g.size){ const g = (G[s.k] || {}).g; const label = g && S.grades.includes(g) ? g : "미판단"; if (!st.g.has(label)) return false; }
+  return true;
+}
+function render(){
+  saveView();
+  document.querySelectorAll("#gD .chip").forEach(b => b.classList.toggle("on", st.d.has(+b.dataset.v)));
+  document.querySelectorAll("#gQ .chip").forEach(b => b.classList.toggle("on", st.q === b.dataset.q));
+  document.querySelectorAll("#gG .chip").forEach(b => b.classList.toggle("on", st.g.has(b.dataset.v)));
+  const gc = {}; D.segs.forEach(s => { const g = (G[s.k] || {}).g; if (g) gc[g] = (gc[g] || 0) + 1; });
+  $("gsum").textContent = "판단한 구간: " + S.grades.map(g => `${g} ${gc[g] || 0}`).join(" · ");
+  const base = D.segs.filter(baseMatch);
+  const shown = base.filter(s => [...st.codes].every(c => s.codes.includes(c)));
+  const cnt = {}; base.forEach(s => s.codes.forEach(c => cnt[c] = (cnt[c] || 0) + 1));
+  const tree = $("tree"); tree.innerHTML = "";
+  D.cats.forEach(cat => {
+    const h = document.createElement("div"); h.className = "cat";
+    const d = document.createElement("span"); d.className = "dot"; d.style.background = CAT_COLOR[cat];
+    h.append(d, document.createTextNode(cat)); tree.appendChild(h);
+    D.codes.filter(c => c.cat === cat).forEach(c => {
+      const row = document.createElement("div"); row.className = "code" + (st.codes.has(c.cid) ? " on" : "") + ((cnt[c.cid] || 0) === 0 ? " zero" : "");
+      const nm = document.createElement("span"); nm.textContent = c.name;
+      const n = document.createElement("span"); n.className = "n"; n.textContent = "(" + (cnt[c.cid] || 0) + ")";
+      row.append(nm, n); row.onclick = () => { st.codes.has(c.cid) ? st.codes.delete(c.cid) : st.codes.add(c.cid); render(); };
+      tree.appendChild(row);
+    });
+  });
+  const sel = $("sel"); sel.innerHTML = "";
+  if (st.codes.size){ sel.append("선택한 코드:");
+    st.codes.forEach(cid => { const t = document.createElement("span"); t.className = "tag"; t.textContent = CODE[cid].cat + " › " + CODE[cid].name + " ×"; t.onclick = () => { st.codes.delete(cid); render(); }; sel.appendChild(t); });
+    const clr = document.createElement("span"); clr.className = "tag"; clr.textContent = "모두 지우기"; clr.onclick = () => { st.codes.clear(); render(); }; sel.appendChild(clr); }
+  $("count").textContent = `구간 ${shown.length}개 (코딩 ${shown.reduce((a, s) => a + s.codes.length, 0)}개) · 전체 구간 ${D.segs.length}개`;
+  const list = $("list"); list.innerHTML = "";
+  if (!shown.length){ const e = document.createElement("div"); e.className = "empty"; e.textContent = "조건에 맞는 구간이 없습니다."; list.appendChild(e); return; }
+  const frag = document.createDocumentFragment();
+  shown.forEach(s => frag.appendChild(segBox(s)));
+  list.appendChild(frag);
+}
+function segBox(s){
+  const box = document.createElement("div"); box.className = "seg";
+  const meta = document.createElement("div"); meta.className = "meta";
+  const doc = document.createElement("span"); doc.className = "doc"; doc.textContent = DOC[s.doc] ? DOC[s.doc].name : s.doc;
+  const tm = document.createElement("span"); tm.textContent = s.time ? `[${s.time}]` : "";
+  const cb = document.createElement("button"); cb.className = "ctxbtn"; cb.type = "button"; cb.textContent = "앞뒤 문맥";
+  meta.append(doc, tm, cb); box.appendChild(meta);
+  const q = document.createElement("div"); q.className = "q";
+  const b = document.createElement("span"); b.className = "ctx"; b.textContent = "…" + s.before; b.hidden = true;
+  const m = document.createElement("mark"); m.textContent = s.quote;
+  const a = document.createElement("span"); a.className = "ctx"; a.textContent = s.after + "…"; a.hidden = true;
+  q.append(b, m, a); box.appendChild(q);
+  cb.onclick = () => { b.hidden = !b.hidden; a.hidden = !a.hidden; };
+  const cs = document.createElement("div"); cs.className = "codes";
+  s.codes.forEach(cid => { const c = CODE[cid]; if (!c) return; const t = document.createElement("span"); t.style.borderLeftColor = CAT_COLOR[c.cat];
+    t.textContent = c.cat + " › " + c.name; t.title = "이 코드로 거르기";
+    t.onclick = () => { st.codes.add(cid); render(); window.scrollTo({ top: 0 }); }; cs.appendChild(t); });
+  box.appendChild(cs);
+  if (s.memos.length){ const mm = document.createElement("div"); const joined = s.memos.join(" ");
+    mm.className = "memo" + (S.quick.some(w => w && joined.includes(w)) ? " hl" : "");
+    s.memos.forEach(x => { const p = document.createElement("p"); p.textContent = x; mm.appendChild(p); }); box.appendChild(mm); }
+  const cur = G[s.k] || {};
+  const gi = S.grades.indexOf(cur.g);
+  if (gi >= 0){ box.style.borderLeft = "4px solid " + GRADE_COLOR[gi % GRADE_COLOR.length]; }
+  const j = document.createElement("div"); j.className = "judge";
+  const jl = document.createElement("span"); jl.textContent = "판단"; j.appendChild(jl);
+  S.grades.forEach((g, i) => { const bt = document.createElement("button"); bt.type = "button"; bt.textContent = g;
+    if (cur.g === g){ bt.classList.add("on"); bt.style.background = GRADE_COLOR[i % GRADE_COLOR.length]; bt.style.borderColor = GRADE_COLOR[i % GRADE_COLOR.length]; }
+    bt.onclick = () => { const o = G[s.k] || {}; if (o.g === g) delete o.g; else o.g = g; o.t = new Date().toISOString();
+      if (!o.g && !o.note) delete G[s.k]; else G[s.k] = o; saveG(); render(); };
+    j.appendChild(bt); });
+  const ta = document.createElement("textarea"); ta.placeholder = "판단 메모"; ta.value = cur.note || "";
+  ta.onchange = () => { const o = G[s.k] || {}; o.note = ta.value.trim(); o.t = new Date().toISOString();
+    if (!o.g && !o.note) delete G[s.k]; else G[s.k] = o; saveG(); render(); };
+  j.appendChild(ta); box.appendChild(j);
+  return box;
+}
+
+/* ---------- 버튼 ---------- */
+$("openQda").onchange = async e => {
+  const f = e.target.files[0]; e.target.value = ""; if (!f) return;
+  $("loadMsg").textContent = "읽는 중…";
+  try{ start(await loadQda(f)); $("loadMsg").textContent = ""; }catch(err){ $("loadMsg").textContent = "열지 못했습니다: " + err.message; }
+};
+$("openJson").onchange = e => {
+  const f = e.target.files[0]; e.target.value = ""; if (!f) return;
+  const r = new FileReader();
+  r.onload = () => { try{ const j = JSON.parse(r.result); if (!j.segs || !j.codes) throw new Error("코딩 데이터 형식이 아닙니다."); start(j); $("loadMsg").textContent = ""; }
+    catch(err){ $("loadMsg").textContent = "열지 못했습니다: " + err.message; } };
+  r.readAsText(f, "utf-8");
+};
+$("q").addEventListener("input", e => { st.q = e.target.value.trim(); render(); });
+$("exp").onclick = () => {
+  const blob = new Blob([JSON.stringify({ project: D.title, exported: new Date().toISOString(), grades: G }, null, 1)], { type: "application/json" });
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+  a.download = "판단_" + D.title + "_" + new Date().toISOString().slice(0, 10) + ".json"; document.body.appendChild(a); a.click(); a.remove();
+};
+$("imp").onchange = e => {
+  const f = e.target.files[0]; e.target.value = ""; if (!f) return;
+  const r = new FileReader();
+  r.onload = () => { try{ const j = JSON.parse(r.result); const keys = new Set(D.segs.map(s => s.k)); let n = 0, miss = 0;
+      Object.entries(j.grades || {}).forEach(([k, v]) => { if (keys.has(k)){ G[k] = v; n++; } else miss++; });
+      saveG(); render(); alert(`판단 ${n}개를 불러왔습니다.` + (miss ? ` 맞는 구간이 없는 판단 ${miss}개는 건너뛰었습니다.` : "")); }
+    catch(err){ alert("파일을 읽지 못했습니다: " + err.message); } };
+  r.readAsText(f, "utf-8");
+};
+$("setBtn").onclick = () => { $("setGrades").value = S.grades.join(", "); $("setQuick").value = S.quick.join(", "); $("settings").classList.toggle("open"); };
+$("setSave").onclick = () => {
+  const split = v => v.split(",").map(x => x.trim()).filter(Boolean);
+  const g = split($("setGrades").value); S = { grades: g.length ? g : DEFAULT_SETTINGS.grades, quick: split($("setQuick").value) };
+  LS.set("cv-settings", S); $("settings").classList.remove("open"); buildBar(); render();
+};
+$("reset").onclick = () => {
+  if (!confirm("불러온 자료와 판단, 설정을 이 브라우저에서 모두 지울까요?\n(판단을 남기려면 먼저 '판단 저장(파일)'을 누르세요.)")) return;
+  LS.clearAll(); S = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+  D = null; G = {}; CODE = {}; DOC = {}; st.d.clear(); st.codes.clear(); st.q = ""; st.g.clear();
+  $("tree").innerHTML = ""; $("list").innerHTML = ""; $("sel").innerHTML = ""; $("count").textContent = "";
+  $("app").hidden = true; $("loader").hidden = false; $("title").textContent = "코딩 한눈에 보기";
+  $("loadMsg").textContent = EMBED ? "화면에서 지웠습니다. 이 HTML 파일 안에 넣어 만든 자료는 파일 자체를 지워야 없어집니다." : "모두 지웠습니다.";
+};
+
+if (EMBED) start(EMBED);
+</script>
+</body>
+</html>
